@@ -2,7 +2,7 @@ import {defineCliConfig} from 'sanity/cli'
 
 export default defineCliConfig({
   api: {
-    projectId: '8hlvio0k',
+    projectId: 'qn30822y',
     dataset: 'production'
   }
 })

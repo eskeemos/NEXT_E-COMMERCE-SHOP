@@ -3,7 +3,7 @@ import { client } from '../lib/client';
 import { Product, FooterBanner, HeroBanner } from '../components';
 
 const Home = ({ products, banner}) => {
-  
+  console.log(products, banner);
   return (
     <>
       <HeroBanner />
