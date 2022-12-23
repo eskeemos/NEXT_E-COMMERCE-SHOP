@@ -2,11 +2,11 @@ import React from 'react'
 import { client } from '../lib/client';
 import { Product, FooterBanner, HeroBanner } from '../components';
 
-const Home = ({ products, banner}) => {
-  console.log(products, banner);
+const Home = ({ products, heroBanner}) => {
+  console.log(products, heroBanner);
   return (
     <>
-      <HeroBanner />
+      <HeroBanner heroBanner={heroBanner.length && heroBanner[0]} />
       <div className='text-center my-10 text-[#324d67]'>
         <h2 className='text-4xl font-bold'>Best Seller Products</h2>
         <p className='font-normal'>Speakers of many variations</p>
@@ -22,10 +22,10 @@ export const getServerSideProps = async () => {
   const productQuery = '*[_type == "product"]';
   const products = await client.fetch(productQuery);
   const bannerQuery = '*[_type == "banner"]';
-  const banner = await client.fetch(bannerQuery);
+  const heroBanner = await client.fetch(bannerQuery);
 
   return {
-    props: { products, banner }
+    props: { products, heroBanner }
   }
 }
 
