@@ -11,7 +11,9 @@ const Home = ({ products, banner }) => {
         <p className='font-normal'>Speakers of many variations</p>
       </div>
       <div className='flex flex-wrap justify-center gap-4 mt-5 w-full'>
-        {products?.map(product => <Product key={product._id} product={product} />)}
+        {products?.map(product =>
+          <Product key={product._id} product={product} />
+        )}
       </div>
       <FooterBanner footerBanner={banner.length && banner[0]} />
     </>
