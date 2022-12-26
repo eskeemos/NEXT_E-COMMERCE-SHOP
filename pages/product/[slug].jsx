@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { client, urlFor } from '../../lib/client'
 import { AiOutlineMinus, AiOutlinePlus, AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import Product from '../../components/Product';
+import { useStateContext } from '../../context/StateContext';
 
-const ProductDetails = ({ products, productDetails }) => {
-  const { image, name, details, price } = productDetails;
-  const [index, setIndex] = useState(0)
+const ProductDetails = ({ products, product }) => {
+  const { image, name, details, price } = product;
+  const [index, setIndex] = useState(0);
+  const { decQty, incQty, qty, onAdd } = useStateContext();
   return (
     <div>
       <div className="flex-nowrap m-5 md:m-10 md:mt-14 text-[#324d67] flex gap-10">
@@ -15,7 +17,7 @@ const ProductDetails = ({ products, productDetails }) => {
           </div>
           <div className="flex gap-2 mt-5">
             {image?.map((product, i) => (
-              <img src={urlFor(product)} alt="product" onMouseEnter={() => setIndex(i)} className={i === index ? 'rounded-lg bg-[#f02d34] w-20 h-20 cursor-pointer' : 'rounded-lg bg-[#ebebeb] w-20 h-20 cursor-pointer'} />
+              <img src={urlFor(product)} alt="product" key={product._id} onMouseEnter={() => setIndex(i)} className={i === index ? 'rounded-lg bg-[#f02d34] w-20 h-20 cursor-pointer' : 'rounded-lg bg-[#ebebeb] w-20 h-20 cursor-pointer'} />
             ))}
           </div>
         </div>
@@ -38,13 +40,13 @@ const ProductDetails = ({ products, productDetails }) => {
           <div className="font-semibold gap-5 mt-2 items-center flex">
             <h3 className="pt-1">Quantity:</h3>
             <p className="border border-gray-600 flex mt-2">
-              <span className='border-r border-gray-600 py-2 px-4 text-[#f02d34]'>
+              <span className='border-r border-gray-600 py-2 px-4 text-[#f02d34] cursor-pointer' onClick={decQty}>
                 <AiOutlineMinus />
               </span>
-              <span className='border-r border-gray-600 px-4 pt-[5px]'>
-                0
+              <span className='border-r border-gray-600 w-12 text-center pt-[5px]'>
+                {qty}
               </span>
-              <span className='py-2 px-4 text-[#f02d34]'>
+              <span className='py-2 px-4 text-[#f02d34] cursor-pointer' onClick={incQty}>
                 <AiOutlinePlus />
               </span>
             </p>
@@ -52,7 +54,7 @@ const ProductDetails = ({ products, productDetails }) => {
           <div className="flex gap-7">
             <button type="button" className="text-black hover:text-white border 
             border-black hover:bg-black focus:ring-4 focus:outline-none focus:ring-blue-300
-            font-medium rounded-lg text-sm py-2.5 text-center mr-2 mb-2 mt-5 transition-colors w-full">
+            font-medium rounded-lg text-sm py-2.5 text-center mr-2 mb-2 mt-5 transition-colors w-full" onClick={() => onAdd(product, qty)}>
               Add to Cart</button>
             <button type="button" className="text-white hover:text-black border 
             border-black bg-black hover:bg-white focus:ring-4 focus:outline-none focus:ring-blue-300
@@ -95,14 +97,14 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({ params: { slug } }) => {
-  const productDetailsQuery = `*[_type == "product" && slug.current == '${slug}'][0]`;
+  const productQuery = `*[_type == "product" && slug.current == '${slug}'][0]`;
   const productsQuery = `*[_type == "product"]`;
 
-  const productDetails = await client.fetch(productDetailsQuery);
+  const product = await client.fetch(productQuery);
   const products = await client.fetch(productsQuery);
 
   return {
-    props: { productDetails, products }
+    props: { product, products }
   }
 }
 
