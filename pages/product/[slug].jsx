@@ -17,7 +17,7 @@ const ProductDetails = ({ products, product }) => {
           </div>
           <div className="flex gap-2 mt-5">
             {image?.map((product, i) => (
-              <img src={urlFor(product)} alt="product" key={product._id} onMouseEnter={() => setIndex(i)} className={i === index ? 'rounded-lg bg-[#f02d34] w-20 h-20 cursor-pointer' : 'rounded-lg bg-[#ebebeb] w-20 h-20 cursor-pointer'} />
+              <img src={urlFor(product)} alt="product" key={i} onMouseEnter={() => setIndex(i)} className={i === index ? 'rounded-lg bg-[#f02d34] w-20 h-20 cursor-pointer' : 'rounded-lg bg-[#ebebeb] w-20 h-20 cursor-pointer'} />
             ))}
           </div>
         </div>

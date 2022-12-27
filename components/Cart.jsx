@@ -5,10 +5,24 @@ import { TiDeleteOutline } from 'react-icons/ti';
 import toast from 'react-hot-toast';
 import { useStateContext } from '../context/StateContext';
 import { urlFor } from '../lib/client';
+import getStripe from '../lib/getStripe';
 const Cart = () => {
   const cartRef = useRef();
   const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemsQuantity, onRemove } = useStateContext();
-
+  const handleCheckout = async () => {
+    const stripe = await getStripe();
+    const response = await fetch('/api/stripe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(cartItems)
+    });
+    if (response.statusCode === 500) return;
+    const data = await response.json();
+    toast.loading('Redirecting...');
+    stripe.redirectToCheckout({sessionId: data.id});
+  }
   return (
     <div className='w-screen bg-[#00000080] fixed right-0 top-0 z-50 transition-all' ref={cartRef}>
       <div className='h-screen w-[600px] bg-white float-right py-10 px-2 relative'>
@@ -37,13 +51,13 @@ const Cart = () => {
                 </div>
                 <div className="flex justify-between">
                   <p className="border border-gray-600 flex">
-                    <span className='border-r border-gray-600 py-2 px-4 cursor-pointer' onClick={() => toggleCartItemsQuantity(item._id,'dec')}>
+                    <span className='border-r border-gray-600 py-2 px-4 cursor-pointer' onClick={() => toggleCartItemsQuantity(item._id, 'dec')}>
                       <AiOutlineMinus />
                     </span>
                     <span className='border-r border-gray-600 w-12 text-center pt-[5px]'>
                       {item.quantity}
                     </span>
-                    <span className='py-2 px-4 cursor-pointer' onClick={() => toggleCartItemsQuantity(item._id,'inc')}>
+                    <span className='py-2 px-4 cursor-pointer' onClick={() => toggleCartItemsQuantity(item._id, 'inc')}>
                       <AiOutlinePlus />
                     </span>
                   </p>
@@ -60,7 +74,7 @@ const Cart = () => {
               <h3 className='pl-2'>${totalPrice}</h3>
             </div>
             <div className="w-[400px] m-auto">
-              <button type="button" onClick="" className="text-white hover:text-black border border-black bg-black hover:bg-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 text-center mr-2 mb-2 mt-5 transition-colors w-full">Pay with Stripe</button>
+              <button type="button" onClick={handleCheckout} className="text-white hover:text-black border border-black bg-black hover:bg-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 text-center mr-2 mb-2 mt-5 transition-colors w-full">Pay with Stripe</button>
             </div>
           </div>
         )}
