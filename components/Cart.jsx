@@ -7,7 +7,7 @@ import { useStateContext } from '../context/StateContext';
 import { urlFor } from '../lib/client';
 const Cart = () => {
   const cartRef = useRef();
-  const { totalPrice, totalQuantities, cartItems, setShowCart } = useStateContext();
+  const { totalPrice, totalQuantities, cartItems, setShowCart, toggleCartItemsQuantity, onRemove } = useStateContext();
 
   return (
     <div className='w-screen bg-[#00000080] fixed right-0 top-0 z-50 transition-all' ref={cartRef}>
@@ -26,7 +26,7 @@ const Cart = () => {
             </Link>
           </div>
         )}
-        <div className="mt-4 overflow-hidden max-h-[70vh] py-5 px-2">
+        <div className="mt-4 overflow-x-auto max-h-[70vh] py-5 px-2">
           {cartItems.length >= 1 && cartItems.map((item, index) => (
             <div className="flex gap-7 p-5 my-1" key={index}>
               <img src={urlFor(item?.image[0])} className="w-44 h-40 rounded-2xl bg-[#ebebeb]" alt="product" />
@@ -37,17 +37,17 @@ const Cart = () => {
                 </div>
                 <div className="flex justify-between">
                   <p className="border border-gray-600 flex">
-                    <span className='border-r border-gray-600 py-2 px-4 cursor-pointer' onClick="">
+                    <span className='border-r border-gray-600 py-2 px-4 cursor-pointer' onClick={() => toggleCartItemsQuantity(item._id,'dec')}>
                       <AiOutlineMinus />
                     </span>
                     <span className='border-r border-gray-600 w-12 text-center pt-[5px]'>
-                      0
+                      {item.quantity}
                     </span>
-                    <span className='py-2 px-4 cursor-pointer' onClick="">
+                    <span className='py-2 px-4 cursor-pointer' onClick={() => toggleCartItemsQuantity(item._id,'inc')}>
                       <AiOutlinePlus />
                     </span>
                   </p>
-                  <button type="button" className="text-[#f02d34] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-center text-2xl" onClick=""><TiDeleteOutline /></button>
+                  <button type="button" className="text-[#f02d34] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-center text-2xl" onClick={() => onRemove(item)}><TiDeleteOutline /></button>
                 </div>
               </div>
             </div>
