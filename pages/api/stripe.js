@@ -1,4 +1,4 @@
-const stripe = require('stripe')('"'+process.env.STRIPE_SECRET_KEY+'"');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         submit_type: 'pay',
         mode: 'payment',
         payment_method_types: ['card'],
-        billing_address_colection: 'auto',
+        billing_address_collection: 'auto',
         shipping_options: [
           { shipping_rate: 'shr_1MJbdPF9guTtw2YG6wW81GU8' },
           { shipping_rate: 'shr_1MJbe2F9guTtw2YGSckbRovf' }
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
           return {
             price_data: {
-              currency: 'zl',
+              currency: 'pln',
               product_data: {
                 name: item.name,
                 images: [newImg]
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
             },
             adjustable_quantity: {
               enabled: true,
-              minmum: 1
+              minimum: 1
             },
             quantity: item.quantity
           }
