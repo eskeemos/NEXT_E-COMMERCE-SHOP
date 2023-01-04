@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { BsBagCheckFill } from 'react-icons/bs'
 import { useStateContext } from '../context/StateContext'
+import { runFireworks } from '../lib/utils'
 
 const Success = () => {
   const { setCartItems, setTotalPrice, setTotalQuantities } = useStateContext();
@@ -10,6 +11,7 @@ const Success = () => {
     setCartItems([]);
     setTotalPrice(0);
     setTotalQuantities(0);
+    runFireworks();
   }, [])
   
   return (
@@ -26,7 +28,7 @@ const Success = () => {
         </p>
         <Link href="/">
           <button type="button" className="text-black hover:text-white border 
-            border-black hover:bg-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-10 transition-colors">Continue shopping 3:17</button>
+            border-black hover:bg-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-10 transition-colors">Continue shopping</button>
         </Link>
       </div>
     </div>

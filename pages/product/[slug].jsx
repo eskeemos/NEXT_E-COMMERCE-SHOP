@@ -7,7 +7,11 @@ import { useStateContext } from '../../context/StateContext';
 const ProductDetails = ({ products, product }) => {
   const { image, name, details, price } = product;
   const [index, setIndex] = useState(0);
-  const { decQty, incQty, qty, onAdd } = useStateContext();
+  const { decQty, incQty, qty, onAdd, setShowCart } = useStateContext();
+  const buyNow = () => {
+    onAdd(product, qty);
+    setShowCart(true);
+  }
   return (
     <div>
       <div className="flex-nowrap m-5 md:m-10 md:mt-14 text-[#324d67] flex gap-10">
@@ -58,7 +62,7 @@ const ProductDetails = ({ products, product }) => {
               Add to Cart</button>
             <button type="button" className="text-white hover:text-black border 
             border-black bg-black hover:bg-white focus:ring-4 focus:outline-none focus:ring-blue-300
-            font-medium rounded-lg text-sm py-2.5 text-center mr-2 mb-2 mt-5 transition-colors w-full">
+            font-medium rounded-lg text-sm py-2.5 text-center mr-2 mb-2 mt-5 transition-colors w-full" onClick={buyNow}>
               Buy Now</button>
           </div>
         </div>
